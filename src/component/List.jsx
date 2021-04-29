@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
+    IconButton,
     Paper,
     Table,
     TableBody,
@@ -9,8 +10,13 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
+    Toolbar,
+    Typography,
+    Input,
+    InputAdornment,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 
 const HEADER = [
     'city',
@@ -27,6 +33,9 @@ const HEADER = [
 const useStyle = makeStyles((theme) => ({
     paper: {
         margin: '10px 20px',
+    },
+    title: {
+        flex: '1 1 100%',
     },
 }));
 
@@ -60,6 +69,7 @@ const List = () => {
     const classes = useStyle();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('city');
+    const [keyword, setKeyword] = useState('');
 
     const requestSortBy = (item) => {
         const isAsc = orderBy === item && order === 'asc';
@@ -69,6 +79,27 @@ const List = () => {
 
     return (
         <Paper className={classes.paper}>
+            <Toolbar>
+                <Typography
+                    className={classes.title}
+                    variant='h6'
+                    component='div'
+                >
+                    Warehouses
+                </Typography>
+                <Input
+                    value={keyword}
+                    onChange={(event) => setKeyword(event.target.value)}
+                    placeholder='city or name'
+                    endAdornment={
+                        <InputAdornment position='end'>
+                            <IconButton aria-label='search'>
+                                <SearchSharpIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    }
+                />
+            </Toolbar>
             <TableContainer>
                 <Table>
                     <TableHead>
@@ -87,17 +118,26 @@ const List = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {stableSort(data, getComparator(order, orderBy)).map(
-                            (item) => (
-                                <TableRow key={item.id}>
-                                    {HEADER.map((key) => (
-                                        <TableCell key={item.id + key}>
-                                            {item[key].toString()}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            )
-                        )}
+                        {stableSort(
+                            data.filter(
+                                (item) =>
+                                    item.city
+                                        .toLowerCase()
+                                        .search(keyword.toLowerCase()) >= 0 ||
+                                    item.name
+                                        .toLowerCase()
+                                        .search(keyword.toLowerCase()) >= 0
+                            ),
+                            getComparator(order, orderBy)
+                        ).map((item) => (
+                            <TableRow key={item.id}>
+                                {HEADER.map((key) => (
+                                    <TableCell key={item.id + key}>
+                                        {item[key].toString()}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
