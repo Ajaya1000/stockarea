@@ -14,7 +14,12 @@ const reducer = (state = defaultState, action) => {
         }
         case Actions.Types.UPDATE_ITEM: {
             console.log(action);
-            const newState = state;
+            const newItems = state.items.map((item) =>
+                item.id === action.payload.id ? action.payload : item
+            );
+            const newState = {
+                items: newItems,
+            };
             return newState;
         }
         case Actions.Types.DELETE_ITEM: {

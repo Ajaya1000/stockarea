@@ -14,8 +14,8 @@ import {
     Typography,
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Actions from '../modules/action';
 import { HEADER, TYPE, EDITABLES } from '../assets/info';
@@ -30,31 +30,68 @@ const useStyle = makeStyles((theme) => ({
     inputGroup: {
         marginBottom: '5px',
     },
+    alert: {
+        marginBottom: '10px',
+    },
+    warn: {
+        color: '#ce6866',
+    },
+    noWarn: {
+        color: '#428342',
+    },
 }));
-
-const CustomInputGroup = ({ label, value, onChange, isEditable }) => {};
 
 const Detail = () => {
     const history = useHistory();
+    const params = useParams();
+    const data = useSelector(
+        (state) =>
+            state.items.filter((item) => item.id.toString() === params.id)[0]
+    );
     const classes = useStyle();
     const [isEditable, setEditable] = useState(false);
     const dispatch = useDispatch();
-    const [name, setName] = useState(history.location.state.name);
-    const [code, setCode] = useState(history.location.state.code);
-    const [id, setId] = useState(history.location.state.id);
-    const [city, setCity] = useState(history.location.state.city);
-    const [spaceAvailble, setSpaceAvailble] = useState(
-        history.location.state.space_available
-    );
+    const [name, setName] = useState(data.name);
+    const [code, setCode] = useState(data.code);
+    const [id, setId] = useState(data.id);
+    const [city, setCity] = useState(data.city);
+    const [spaceAvailble, setSpaceAvailble] = useState(data.space_available);
     const [type, setType] = useState(
-        TYPE.findIndex((item) => history.location.state.type === item)
+        TYPE.findIndex((item) => data.type === item)
     );
-    const [cluster, setcluster] = useState(history.location.state.cluster);
-    const [isRegistered, setRegistered] = useState(
-        history.location.state.is_registered
-    );
-    const [isLive, setLive] = useState(history.location.state.is_live);
+    const [cluster, setcluster] = useState(data.cluster);
+    const [isRegistered, setRegistered] = useState(data.is_registered);
+    const [isLive, setLive] = useState(data.is_live);
+    const [newChange, setNewChange] = useState(false);
 
+    /**
+     * This uitlity function is used to create new item from
+     * the edits
+     *
+     * @returns [object]
+     */
+    const giveItem = () => ({
+        city,
+        name,
+        cluster,
+        id,
+        is_live: isLive,
+        is_registered: isRegistered,
+        space_available: spaceAvailble,
+        type: TYPE[type],
+        code,
+    });
+
+    const discardChanges = () => {
+        setName(data.name);
+        setCode(data.code);
+        setCity(data.city);
+        setcluster(data.cluster);
+        setSpaceAvailble(data.space_available);
+        setRegistered(data.is_registered);
+        setLive(data.is_live);
+        setType(TYPE.findIndex((item) => data.type === item));
+    };
     return (
         <>
             <AppBar color='transparent'>
@@ -67,11 +104,20 @@ const Detail = () => {
             <Container maxWidth='sm' className={classes.container}>
                 <Card variant='elevation'>
                     <CardContent>
-                        {/* {HEADER.map(
-                            (key, index) => (
-                                <CustomInputGroup key={key} label={key} isEditable={isEditable && EDITABLES.findIndex(key)>=0} on />
-                            )
-                        )} */}
+                        {isEditable && newChange && (
+                            <div className={classes.alert}>
+                                <Typography className={classes.warn}>
+                                    *There are changes to save
+                                </Typography>
+                            </div>
+                        )}
+                        {isEditable && !newChange && (
+                            <div className={classes.alert}>
+                                <Typography className={classes.noWarn}>
+                                    *There is no change to save
+                                </Typography>
+                            </div>
+                        )}
                         <div id='inputGroup0' className={classes.inputGroup}>
                             <Typography
                                 component='span'
@@ -83,9 +129,10 @@ const Detail = () => {
                             {isEditable ? (
                                 <TextField
                                     value={name}
-                                    onChange={(event) =>
-                                        setName(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setName(event.target.value);
+                                        setNewChange(true);
+                                    }}
                                 />
                             ) : (
                                 <Typography component='span' variant='h6'>
@@ -128,9 +175,10 @@ const Detail = () => {
                             {isEditable ? (
                                 <TextField
                                     value={city}
-                                    onChange={(event) =>
-                                        setCity(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setCity(event.target.value);
+                                        setNewChange(true);
+                                    }}
                                 />
                             ) : (
                                 <Typography component='span' variant='h6'>
@@ -149,9 +197,10 @@ const Detail = () => {
                             {isEditable ? (
                                 <TextField
                                     value={spaceAvailble}
-                                    onChange={(event) =>
-                                        setSpaceAvailble(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setSpaceAvailble(event.target.value);
+                                        setNewChange(true);
+                                    }}
                                 />
                             ) : (
                                 <Typography component='span' variant='h6'>
@@ -171,9 +220,10 @@ const Detail = () => {
                                 <TextField
                                     value={type}
                                     select
-                                    onChange={(event) =>
-                                        setType(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setType(event.target.value);
+                                        setNewChange(true);
+                                    }}
                                 >
                                     {TYPE.map((item, index) => (
                                         <MenuItem key={item} value={index}>
@@ -211,9 +261,10 @@ const Detail = () => {
                                 <TextField
                                     value={isRegistered}
                                     select
-                                    onChange={(event) =>
-                                        setRegistered(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setRegistered(event.target.value);
+                                        setNewChange(true);
+                                    }}
                                 >
                                     <MenuItem
                                         key='registration-key-0'
@@ -243,9 +294,10 @@ const Detail = () => {
                                 <TextField
                                     value={isLive}
                                     select
-                                    onChange={(event) =>
-                                        setLive(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setLive(event.target.value);
+                                        setNewChange(true);
+                                    }}
                                 >
                                     <MenuItem key='live-key-0' value={false}>
                                         No
@@ -262,20 +314,52 @@ const Detail = () => {
                         </div>
                     </CardContent>
                     <CardActions>
-                        <Button
-                            style={{ marginLeft: 'auto' }}
-                            size='medium'
-                            color='primary'
-                            variant='contained'
-                            onClick={() => {
-                                dispatch(
-                                    Actions.createItem(history.location.state)
-                                );
-                                setEditable(true);
-                            }}
-                        >
-                            <Typography>Edit</Typography>
-                        </Button>
+                        {isEditable ? (
+                            <>
+                                <Button
+                                    style={{ marginLeft: 'auto' }}
+                                    size='medium'
+                                    color='primary'
+                                    variant='contained'
+                                    onClick={() => {
+                                        console.log('saved clicked', newChange);
+                                        if (newChange) {
+                                            const newItem = giveItem();
+                                            dispatch(
+                                                Actions.updateItem(newItem)
+                                            );
+                                            setNewChange(false);
+                                        }
+                                    }}
+                                >
+                                    <Typography>Save</Typography>
+                                </Button>
+                                <Button
+                                    size='medium'
+                                    color='secondary'
+                                    variant='contained'
+                                    onClick={() => {
+                                        discardChanges();
+                                        setEditable(false);
+                                        setNewChange(false);
+                                    }}
+                                >
+                                    <Typography>Cancle</Typography>
+                                </Button>
+                            </>
+                        ) : (
+                            <Button
+                                style={{ marginLeft: 'auto' }}
+                                size='medium'
+                                color='primary'
+                                variant='contained'
+                                onClick={() => {
+                                    setEditable(true);
+                                }}
+                            >
+                                <Typography>Edit</Typography>
+                            </Button>
+                        )}
                     </CardActions>
                 </Card>
             </Container>
