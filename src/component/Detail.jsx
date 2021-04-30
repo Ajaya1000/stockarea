@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     AppBar,
+    Button,
     Card,
+    CardActions,
     CardContent,
     Container,
     IconButton,
@@ -22,6 +24,7 @@ const useStyle = makeStyles((theme) => ({
 const Detail = () => {
     const history = useHistory();
     const classes = useStyle();
+    const [isEditable, setEditable] = useState(false);
 
     return (
         <>
@@ -45,6 +48,7 @@ const Detail = () => {
                                     {key} :
                                 </Typography>
                                 <Typography
+                                    contentEditable={isEditable}
                                     key={key}
                                     variant='h5'
                                     component='span'
@@ -54,6 +58,17 @@ const Detail = () => {
                             </div>
                         ))}
                     </CardContent>
+                    <CardActions>
+                        <Button
+                            style={{ marginLeft: 'auto' }}
+                            size='medium'
+                            color='primary'
+                            variant='contained'
+                            onClick={() => setEditable(true)}
+                        >
+                            <Typography>Edit</Typography>
+                        </Button>
+                    </CardActions>
                 </Card>
             </Container>
         </>
