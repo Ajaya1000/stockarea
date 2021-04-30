@@ -18,7 +18,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Actions from '../modules/action';
-import { HEADER, TYPE, EDITABLES } from '../assets/info';
+import { TYPE } from '../assets/info';
 
 const useStyle = makeStyles((theme) => ({
     container: {
@@ -322,7 +322,6 @@ const Detail = () => {
                                     color='primary'
                                     variant='contained'
                                     onClick={() => {
-                                        console.log('saved clicked', newChange);
                                         if (newChange) {
                                             const newItem = giveItem();
                                             dispatch(

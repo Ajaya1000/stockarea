@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     IconButton,
@@ -17,10 +17,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { HEADER } from '../assets/info';
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles(() => ({
     paper: {
         margin: '0.2% 0.4%',
     },
