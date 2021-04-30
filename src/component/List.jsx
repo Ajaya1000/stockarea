@@ -18,18 +18,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import { Link, useHistory } from 'react-router-dom';
-
-const HEADER = [
-    'city',
-    'cluster',
-    'code',
-    'id',
-    'is_live',
-    'is_registered',
-    'name',
-    'space_available',
-    'type',
-];
+import { HEADER } from '../assets/info';
 
 const useStyle = makeStyles((theme) => ({
     paper: {
