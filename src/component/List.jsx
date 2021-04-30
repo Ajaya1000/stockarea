@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
+import { Link, useHistory } from 'react-router-dom';
 
 const HEADER = [
     'city',
@@ -32,7 +33,7 @@ const HEADER = [
 
 const useStyle = makeStyles((theme) => ({
     paper: {
-        margin: '10px 20px',
+        margin: '0.2% 0.4%',
     },
     title: {
         flex: '1 1 100%',
@@ -70,6 +71,7 @@ const List = () => {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('city');
     const [keyword, setKeyword] = useState('');
+    const history = useHistory();
 
     const requestSortBy = (item) => {
         const isAsc = orderBy === item && order === 'asc';
@@ -130,7 +132,13 @@ const List = () => {
                             ),
                             getComparator(order, orderBy)
                         ).map((item) => (
-                            <TableRow key={item.id}>
+                            <TableRow
+                                hover
+                                key={item.id}
+                                onClick={() =>
+                                    history.push(`/detail/${item.id}`, item)
+                                }
+                            >
                                 {HEADER.map((key) => (
                                     <TableCell key={item.id + key}>
                                         {item[key].toString()}
