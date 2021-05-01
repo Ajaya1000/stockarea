@@ -8,12 +8,11 @@ const defaultState = {
 const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case Actions.Types.CREATE_ITEM: {
-            console.log(action);
             const newState = state;
             return newState;
         }
         case Actions.Types.UPDATE_ITEM: {
-            console.log(action);
+            // create a new list by updating the existing one
             const newItems = state.items.map((item) =>
                 item.id === action.payload.id ? action.payload : item
             );
@@ -23,8 +22,13 @@ const reducer = (state = defaultState, action) => {
             return newState;
         }
         case Actions.Types.DELETE_ITEM: {
-            console.log(action);
-            const newState = state;
+            // filter outs rest of the items except the deleted one
+            const newItems = state.items.filter(
+                (item) => item.id !== action.payload.id
+            );
+            const newState = {
+                items: newItems,
+            };
             return newState;
         }
         default: {

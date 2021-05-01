@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     IconButton,
     Paper,
@@ -14,11 +14,16 @@ import {
     Typography,
     Input,
     InputAdornment,
+    Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
+import NearMeIcon from '@material-ui/icons/NearMe';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useHistory } from 'react-router-dom';
+
 import { HEADER } from '../assets/info';
+import Actions from '../modules/action';
 
 const useStyle = makeStyles(() => ({
     paper: {
@@ -54,19 +59,59 @@ const stableSort = (array, comparator) => {
     return stabilizedThis.map((el) => el[0]);
 };
 
+const EnhancedRow = ({ item }) => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    return (
+        <TableRow hover key={item.id}>
+            {HEADER.map((key) => (
+                <TableCell key={item.id + key}>
+                    {item[key].toString()}
+                </TableCell>
+            ))}
+            <TableCell>
+                <Tooltip title='Delete'>
+                    <IconButton
+                        onClick={() => dispatch(Actions.deleteItem(item))}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title='Detail'>
+                    <IconButton
+                        onClick={() => history.push(`/detail/${item.id}`, item)}
+                    >
+                        <NearMeIcon />
+                    </IconButton>
+                </Tooltip>
+            </TableCell>
+        </TableRow>
+    );
+};
+
 const List = () => {
     const data = useSelector((state) => state.items);
     const classes = useStyle();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('city');
     const [keyword, setKeyword] = useState('');
-    const history = useHistory();
 
     const requestSortBy = (item) => {
         const isAsc = orderBy === item && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(item);
     };
+
+    /**
+     * Give list of data w.r.t to the search string
+     * @returns {[data]}
+     */
+    const filteredData = () =>
+        data.filter(
+            (item) =>
+                item.city.toLowerCase().search(keyword.toLowerCase()) >= 0 ||
+                item.name.toLowerCase().search(keyword.toLowerCase()) >= 0
+        );
 
     return (
         <Paper className={classes.paper}>
@@ -106,34 +151,15 @@ const List = () => {
                                     </TableSortLabel>
                                 </TableCell>
                             ))}
+                            <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {stableSort(
-                            data.filter(
-                                (item) =>
-                                    item.city
-                                        .toLowerCase()
-                                        .search(keyword.toLowerCase()) >= 0 ||
-                                    item.name
-                                        .toLowerCase()
-                                        .search(keyword.toLowerCase()) >= 0
-                            ),
+                            filteredData(),
                             getComparator(order, orderBy)
                         ).map((item) => (
-                            <TableRow
-                                hover
-                                key={item.id}
-                                onClick={() =>
-                                    history.push(`/detail/${item.id}`, item)
-                                }
-                            >
-                                {HEADER.map((key) => (
-                                    <TableCell key={item.id + key}>
-                                        {item[key].toString()}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
+                            <EnhancedRow item={item} />
                         ))}
                     </TableBody>
                 </Table>
