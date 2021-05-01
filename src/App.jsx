@@ -7,14 +7,11 @@ import Routes from './Routes';
 import configureStore from './modules/store';
 
 const initialState = window.REDUX_INITIAL_DATA;
-console.log(initialState);
 const reduxStore = configureStore(initialState);
 
 const theme = createMuiTheme({
-    primary: {
-        text: '',
-        textGray: '',
-        background: '',
+    myTheme: {
+        primary: '#EE4844',
     },
 });
 
