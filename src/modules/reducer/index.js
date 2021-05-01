@@ -8,7 +8,18 @@ const defaultState = {
 const reducer = (state = defaultState, action) => {
     switch (action.type) {
         case Actions.Types.CREATE_ITEM: {
-            const newState = state;
+            // findouts the id with max value
+            let maxxId = 0;
+            state.items.forEach((item) => {
+                if (item.id > maxxId) maxxId = item.id;
+            });
+
+            // assigns maxid+1  id value to the next item
+            const newItem = { ...action.payload, id: maxxId + 1 };
+
+            const newState = {
+                items: [...state.items, newItem],
+            };
             return newState;
         }
         case Actions.Types.UPDATE_ITEM: {
