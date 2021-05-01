@@ -15,22 +15,54 @@ import {
     Input,
     InputAdornment,
     Tooltip,
+    Fab,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    MenuItem,
+    DialogActions,
+    Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
 import { useHistory } from 'react-router-dom';
 
-import { HEADER } from '../assets/info';
+import { HEADER, TYPE } from '../assets/info';
 import Actions from '../modules/action';
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
     paper: {
         margin: '0.2% 0.4%',
     },
     title: {
         flex: '1 1 100%',
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(3),
+        right: theme.spacing(4),
+    },
+}));
+
+const useModalStyle = makeStyles(() => ({
+    label: {
+        marginRight: '20px',
+    },
+    inputGroup: {
+        marginBottom: '5px',
+    },
+    alert: {
+        marginBottom: '10px',
+    },
+    warn: {
+        color: '#ce6866',
+    },
+    noWarn: {
+        color: '#428342',
     },
 }));
 
@@ -89,12 +121,230 @@ const EnhancedRow = ({ item }) => {
     );
 };
 
+const AddModal = ({ open, onClose }) => {
+    const dispatch = useDispatch();
+    const [name, setName] = useState('');
+    const [code, setCode] = useState('');
+    const [id, setId] = useState('');
+    const [city, setCity] = useState('');
+    const [spaceAvailble, setSpaceAvailble] = useState('');
+    const [type, setType] = useState(0);
+    const [cluster, setcluster] = useState('');
+    const [isRegistered, setRegistered] = useState(false);
+    const [isLive, setLive] = useState(false);
+
+    const classes = useModalStyle();
+
+    const giveItem = () => ({
+        city,
+        name,
+        cluster,
+        id,
+        is_live: isLive,
+        is_registered: isRegistered,
+        space_available: spaceAvailble,
+        type: TYPE[type],
+        code,
+    });
+
+    const discardChanges = () => {
+        setName('');
+        setCode('');
+        setCity('');
+        setcluster('');
+        setSpaceAvailble('');
+        setRegistered(false);
+        setLive(false);
+        setType(0);
+    };
+
+    return (
+        <Dialog open={open} onClose={() => onClose()} keepMounted>
+            <DialogTitle> Add Item</DialogTitle>
+            <DialogContent>
+                <div id='inputGroup0' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Name :
+                    </Typography>
+                    <TextField
+                        value={name}
+                        onChange={(event) => {
+                            setName(event.target.value);
+                        }}
+                    />
+                </div>
+                <div id='inputGroup1' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Code :
+                    </Typography>
+                    <TextField
+                        value={code}
+                        onChange={(event) => {
+                            setCode(event.target.value);
+                        }}
+                    />
+                </div>
+                <div id='inputGroup3' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        City :
+                    </Typography>
+
+                    <TextField
+                        value={city}
+                        onChange={(event) => {
+                            setCity(event.target.value);
+                        }}
+                    />
+                </div>
+                <div id='inputGroup4' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Space Available :
+                    </Typography>
+
+                    <TextField
+                        value={spaceAvailble}
+                        onChange={(event) => {
+                            setSpaceAvailble(event.target.value);
+                        }}
+                    />
+                </div>
+                <div id='inputGroup5' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Type :
+                    </Typography>
+
+                    <TextField
+                        value={type}
+                        select
+                        onChange={(event) => {
+                            setType(event.target.value);
+                        }}
+                    >
+                        {TYPE.map((item, index) => (
+                            <MenuItem key={item} value={index}>
+                                {item}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </div>
+                <div id='inputGroup6' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Cluster Name :
+                    </Typography>
+                    <TextField
+                        value={cluster}
+                        onChange={(event) => {
+                            setcluster(event.target.value);
+                        }}
+                    />
+                </div>
+                <div id='inputGroup7' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Registered :
+                    </Typography>
+
+                    <TextField
+                        value={isRegistered}
+                        select
+                        onChange={(event) => {
+                            setRegistered(event.target.value);
+                        }}
+                    >
+                        <MenuItem key='registration-key-0' value={false}>
+                            No
+                        </MenuItem>
+                        <MenuItem key='registration-key-1' value>
+                            Yes
+                        </MenuItem>
+                    </TextField>
+                </div>
+                <div id='inputGroup8' className={classes.inputGroup}>
+                    <Typography
+                        component='span'
+                        variant='h5'
+                        className={classes.label}
+                    >
+                        Live :
+                    </Typography>
+
+                    <TextField
+                        value={isLive}
+                        select
+                        onChange={(event) => {
+                            setLive(event.target.value);
+                        }}
+                    >
+                        <MenuItem key='live-key-0' value={false}>
+                            No
+                        </MenuItem>
+                        <MenuItem key='live-key-1' value>
+                            Yes
+                        </MenuItem>
+                    </TextField>
+                </div>
+            </DialogContent>
+            <DialogActions>
+                <Button
+                    size='medium'
+                    color='primary'
+                    onClick={() => {
+                        const newItem = giveItem();
+                        dispatch(Actions.createItem(newItem));
+                        discardChanges();
+                    }}
+                >
+                    <Typography>Add</Typography>
+                </Button>
+                <Button
+                    size='medium'
+                    color='secondary'
+                    autoFocus
+                    onClick={() => {
+                        onClose();
+                    }}
+                >
+                    <Typography>Cancle</Typography>
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
+
 const List = () => {
     const data = useSelector((state) => state.items);
     const classes = useStyle();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('city');
     const [keyword, setKeyword] = useState('');
+    const [isOpen, setOpen] = useState(false);
 
     const requestSortBy = (item) => {
         const isAsc = orderBy === item && order === 'asc';
@@ -112,6 +362,10 @@ const List = () => {
                 item.city.toLowerCase().search(keyword.toLowerCase()) >= 0 ||
                 item.name.toLowerCase().search(keyword.toLowerCase()) >= 0
         );
+
+    const handlClose = () => {
+        setOpen(false);
+    };
 
     return (
         <Paper className={classes.paper}>
@@ -164,6 +418,16 @@ const List = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Tooltip title='Add to the list'>
+                <Fab
+                    color='secondary'
+                    className={classes.fab}
+                    onClick={() => setOpen(true)}
+                >
+                    <AddIcon />
+                </Fab>
+            </Tooltip>
+            <AddModal open={isOpen} onClose={handlClose} />
         </Paper>
     );
 };
