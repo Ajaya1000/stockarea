@@ -23,7 +23,9 @@ import {
     MenuItem,
     DialogActions,
     Button,
+    Snackbar,
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
 import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import NearMeIcon from '@material-ui/icons/NearMe';
@@ -134,6 +136,9 @@ const AddModal = ({ open, onClose }) => {
     const [isLive, setLive] = useState(false);
 
     const classes = useModalStyle();
+
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
     const giveItem = () => ({
         city,
@@ -341,6 +346,7 @@ const AddModal = ({ open, onClose }) => {
                         const newItem = giveItem();
                         dispatch(Actions.createItem(newItem));
                         discardChanges();
+                        setSuccess(true);
                     }}
                 >
                     <Typography>Add</Typography>
@@ -355,6 +361,15 @@ const AddModal = ({ open, onClose }) => {
                 >
                     <Typography>Cancle</Typography>
                 </Button>
+                <Snackbar
+                    open={success}
+                    autoHideDuration={6000}
+                    onClose={() => setSuccess(false)}
+                >
+                    <MuiAlert elevation={6} variant='filled' severity='success'>
+                        Item added succesfully
+                    </MuiAlert>
+                </Snackbar>
             </DialogActions>
         </Dialog>
     );
