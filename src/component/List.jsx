@@ -127,7 +127,7 @@ const AddModal = ({ open, onClose }) => {
     const [code, setCode] = useState('');
     const [id, setId] = useState('');
     const [city, setCity] = useState('');
-    const [spaceAvailble, setSpaceAvailble] = useState('');
+    const [spaceAvailble, setSpaceAvailble] = useState(0);
     const [type, setType] = useState(0);
     const [cluster, setcluster] = useState('');
     const [isRegistered, setRegistered] = useState(false);
@@ -137,14 +137,13 @@ const AddModal = ({ open, onClose }) => {
 
     const giveItem = () => ({
         city,
-        name,
-        cluster,
-        id,
+        name: `Warehouse-${name}`,
+        cluster: `cluster-${cluster}`,
         is_live: isLive,
         is_registered: isRegistered,
         space_available: spaceAvailble,
         type: TYPE[type],
-        code,
+        code: `W-${code}`,
     });
 
     const discardChanges = () => {
@@ -175,6 +174,13 @@ const AddModal = ({ open, onClose }) => {
                         onChange={(event) => {
                             setName(event.target.value);
                         }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position='start'>
+                                    Warehouse-
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </div>
                 <div id='inputGroup1' className={classes.inputGroup}>
@@ -187,8 +193,16 @@ const AddModal = ({ open, onClose }) => {
                     </Typography>
                     <TextField
                         value={code}
+                        type='number'
                         onChange={(event) => {
                             setCode(event.target.value);
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position='start'>
+                                    W -
+                                </InputAdornment>
+                            ),
                         }}
                     />
                 </div>
@@ -218,6 +232,7 @@ const AddModal = ({ open, onClose }) => {
                     </Typography>
 
                     <TextField
+                        type='number'
                         value={spaceAvailble}
                         onChange={(event) => {
                             setSpaceAvailble(event.target.value);
@@ -259,6 +274,13 @@ const AddModal = ({ open, onClose }) => {
                         value={cluster}
                         onChange={(event) => {
                             setcluster(event.target.value);
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position='start'>
+                                    cluster-
+                                </InputAdornment>
+                            ),
                         }}
                     />
                 </div>
