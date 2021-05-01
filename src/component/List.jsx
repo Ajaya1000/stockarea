@@ -24,6 +24,12 @@ import {
     DialogActions,
     Button,
     Snackbar,
+    Menu,
+    FormControl,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
@@ -31,6 +37,7 @@ import SearchSharpIcon from '@material-ui/icons/SearchSharp';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import { useHistory } from 'react-router-dom';
 
 import { HEADER, TYPE } from '../assets/info';
@@ -375,13 +382,27 @@ const AddModal = ({ open, onClose }) => {
     );
 };
 
+// const FIlterMenuItem = (props) =>{
+
+//     return
+// }
+
 const List = () => {
     const data = useSelector((state) => state.items);
     const classes = useStyle();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('city');
     const [keyword, setKeyword] = useState('');
-    const [isOpen, setOpen] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const [live, setLive] = useState('all');
+    const [registered, setRegistered] = useState('all');
+
+    const category = [
+        { label: 'Live', values: ['yes', 'no', 'all'] },
+        { label: 'Registred', values: ['yes', 'no', 'all'] },
+    ];
 
     const requestSortBy = (item) => {
         const isAsc = orderBy === item && order === 'asc';
@@ -396,12 +417,19 @@ const List = () => {
     const filteredData = () =>
         data.filter(
             (item) =>
-                item.city.toLowerCase().search(keyword.toLowerCase()) >= 0 ||
-                item.name.toLowerCase().search(keyword.toLowerCase()) >= 0
+                (item.city.toLowerCase().search(keyword.toLowerCase()) >= 0 ||
+                    item.name.toLowerCase().search(keyword.toLowerCase()) >=
+                        0) &&
+                (registered === 'all' ||
+                    (item.is_registered
+                        ? registered === 'yes'
+                        : registered === 'no')) &&
+                (live === 'all' ||
+                    (item.is_live ? live === 'yes' : live === 'no'))
         );
 
     const handlClose = () => {
-        setOpen(false);
+        setModalOpen(false);
     };
 
     return (
@@ -426,6 +454,77 @@ const List = () => {
                         </InputAdornment>
                     }
                 />
+                <Tooltip title='Filter list'>
+                    <IconButton
+                        aria-label='filter list'
+                        onClick={(event) => setAnchorEl(event.currentTarget)}
+                    >
+                        <FilterListIcon />
+                    </IconButton>
+                </Tooltip>
+                <Menu
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={() => setAnchorEl(null)}
+                >
+                    <MenuItem>
+                        <FormControl component='fieldset'>
+                            <FormLabel component='legend'>Live</FormLabel>
+                            <RadioGroup
+                                name='live'
+                                value={live}
+                                onChange={(event) =>
+                                    setLive(event.target.value)
+                                }
+                            >
+                                <FormControlLabel
+                                    value='all'
+                                    control={<Radio />}
+                                    label='All'
+                                />
+                                <FormControlLabel
+                                    value='yes'
+                                    control={<Radio />}
+                                    label='Yes'
+                                />
+                                <FormControlLabel
+                                    value='no'
+                                    control={<Radio />}
+                                    label='No'
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                    </MenuItem>
+                    <MenuItem>
+                        <FormControl component='fieldset'>
+                            <FormLabel component='legend'>Registered</FormLabel>
+                            <RadioGroup
+                                name='registred'
+                                value={registered}
+                                onChange={(event) =>
+                                    setRegistered(event.target.value)
+                                }
+                            >
+                                <FormControlLabel
+                                    value='all'
+                                    control={<Radio />}
+                                    label='All'
+                                />
+                                <FormControlLabel
+                                    value='yes'
+                                    control={<Radio />}
+                                    label='Yes'
+                                />
+                                <FormControlLabel
+                                    value='no'
+                                    control={<Radio />}
+                                    label='No'
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                    </MenuItem>
+                </Menu>
             </Toolbar>
             <TableContainer>
                 <Table>
@@ -459,12 +558,12 @@ const List = () => {
                 <Fab
                     color='secondary'
                     className={classes.fab}
-                    onClick={() => setOpen(true)}
+                    onClick={() => setModalOpen(true)}
                 >
                     <AddIcon />
                 </Fab>
             </Tooltip>
-            <AddModal open={isOpen} onClose={handlClose} />
+            <AddModal open={isModalOpen} onClose={handlClose} />
         </Paper>
     );
 };
