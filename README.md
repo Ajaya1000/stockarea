@@ -68,3 +68,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## To DO
+- [X] Add item add function
+- [X] Add Item delete function
+- [ ] Add validation on the item add modal
+- [ ] Add filter to the listing page (live,registered) 
+    -  Adding radio button for live Live,Not Live, All
+    -  Adding radio button for registerd Registered,Not registered, All
+- [ ] Improve Detail page
+    - Breakdown into smaller components
