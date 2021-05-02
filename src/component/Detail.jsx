@@ -7,6 +7,7 @@ import {
     CardContent,
     Container,
     IconButton,
+    InputAdornment,
     makeStyles,
     MenuItem,
     TextField,
@@ -19,6 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Actions from '../modules/action';
 import { TYPE } from '../assets/info';
+import Item from './Item';
 
 const useStyle = makeStyles((theme) => ({
     container: {
@@ -63,6 +65,134 @@ const Detail = () => {
     const [isRegistered, setRegistered] = useState(data.is_registered);
     const [isLive, setLive] = useState(data.is_live);
     const [newChange, setNewChange] = useState(false);
+
+    const giveList = () => [
+        {
+            label: 'Name',
+            value: name,
+            type: 'text',
+            // endorment: {
+            //     startAdornment: (
+            //         <InputAdornment position='start'>Warehouse-</InputAdornment>
+            //     ),
+            // },
+            // menuItems:{
+
+            // }
+            onChange: (value) => {
+                setName(value);
+                setNewChange(true);
+            },
+            isEditable,
+        },
+        {
+            label: 'Code',
+            value: code,
+            type: 'number',
+            endorment: {
+                startAdornment: (
+                    <InputAdornment position='start'>W-</InputAdornment>
+                ),
+            },
+            onChange: (value) => {
+                setCode(value);
+                setNewChange(true);
+            },
+            isEditable: false,
+        },
+        {
+            label: 'ID',
+            value: id,
+            type: 'number',
+            isEditable: false,
+        },
+        {
+            label: 'City',
+            value: city,
+            type: 'text',
+            onChange: (value) => {
+                setCity(value);
+                setNewChange(true);
+            },
+            isEditable,
+        },
+        {
+            label: 'Space Available',
+            value: spaceAvailble,
+            type: 'number',
+            onChange: (value) => {
+                setSpaceAvailble(value);
+                setNewChange(true);
+            },
+            isEditable,
+        },
+        {
+            label: 'Type',
+            value: type,
+            type: 'menu',
+            onChange: (value) => {
+                setType(value);
+                setNewChange(true);
+            },
+            isEditable,
+            menuItems: [
+                {
+                    label: TYPE[0],
+                    value: 0,
+                },
+                {
+                    label: TYPE[1],
+                    value: 1,
+                },
+            ],
+        },
+        {
+            label: 'Cluster Name',
+            value: cluster,
+            // type: 'number',
+            isEditable: false,
+        },
+        {
+            label: 'Registered',
+            value: isRegistered,
+            type: 'menu',
+            onChange: (value) => {
+                setRegistered(value);
+                setNewChange(true);
+            },
+            isEditable,
+            menuItems: [
+                {
+                    label: 'Yes',
+                    value: true,
+                },
+                {
+                    label: 'No',
+                    value: false,
+                },
+            ],
+        },
+        {
+            label: 'Live',
+            value: isLive,
+            type: 'menu',
+            onChange: (value) => {
+                setLive(value);
+                setNewChange(true);
+            },
+            isEditable,
+            menuItems: [
+                {
+                    label: 'Yes',
+                    value: true,
+                },
+                {
+                    label: 'No',
+                    value: false,
+                },
+            ],
+        },
+    ];
 
     /**
      * This uitlity function is used to create new item from
@@ -118,200 +248,11 @@ const Detail = () => {
                                 </Typography>
                             </div>
                         )}
-                        <div id='inputGroup0' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Name :
-                            </Typography>
-                            {isEditable ? (
-                                <TextField
-                                    value={name}
-                                    onChange={(event) => {
-                                        setName(event.target.value);
-                                        setNewChange(true);
-                                    }}
-                                />
-                            ) : (
-                                <Typography component='span' variant='h6'>
-                                    {name}
-                                </Typography>
-                            )}
-                        </div>
-                        <div id='inputGroup1' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Code :
-                            </Typography>
-                            <Typography component='span' variant='h6'>
-                                {code}
-                            </Typography>
-                        </div>
-                        <div id='inputGroup2' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                ID :
-                            </Typography>
-                            <Typography component='span' variant='h6'>
-                                {id}
-                            </Typography>
-                        </div>
-                        <div id='inputGroup3' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                City :
-                            </Typography>
-                            {isEditable ? (
-                                <TextField
-                                    value={city}
-                                    onChange={(event) => {
-                                        setCity(event.target.value);
-                                        setNewChange(true);
-                                    }}
-                                />
-                            ) : (
-                                <Typography component='span' variant='h6'>
-                                    {city}
-                                </Typography>
-                            )}
-                        </div>
-                        <div id='inputGroup4' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Space Available :
-                            </Typography>
-                            {isEditable ? (
-                                <TextField
-                                    value={spaceAvailble}
-                                    onChange={(event) => {
-                                        setSpaceAvailble(event.target.value);
-                                        setNewChange(true);
-                                    }}
-                                />
-                            ) : (
-                                <Typography component='span' variant='h6'>
-                                    {spaceAvailble}
-                                </Typography>
-                            )}
-                        </div>
-                        <div id='inputGroup5' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Type :
-                            </Typography>
-                            {isEditable ? (
-                                <TextField
-                                    value={type}
-                                    select
-                                    onChange={(event) => {
-                                        setType(event.target.value);
-                                        setNewChange(true);
-                                    }}
-                                >
-                                    {TYPE.map((item, index) => (
-                                        <MenuItem key={item} value={index}>
-                                            {item}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            ) : (
-                                <Typography component='span' variant='h6'>
-                                    {TYPE[type]}
-                                </Typography>
-                            )}
-                        </div>
-                        <div id='inputGroup6' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Cluster Name :
-                            </Typography>
-                            <Typography component='span' variant='h6'>
-                                {cluster}
-                            </Typography>
-                        </div>
-                        <div id='inputGroup7' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Registered :
-                            </Typography>
-                            {isEditable ? (
-                                <TextField
-                                    value={isRegistered}
-                                    select
-                                    onChange={(event) => {
-                                        setRegistered(event.target.value);
-                                        setNewChange(true);
-                                    }}
-                                >
-                                    <MenuItem
-                                        key='registration-key-0'
-                                        value={false}
-                                    >
-                                        No
-                                    </MenuItem>
-                                    <MenuItem key='registration-key-1' value>
-                                        Yes
-                                    </MenuItem>
-                                </TextField>
-                            ) : (
-                                <Typography component='span' variant='h6'>
-                                    {isRegistered ? 'Yes' : 'No'}
-                                </Typography>
-                            )}
-                        </div>
-                        <div id='inputGroup8' className={classes.inputGroup}>
-                            <Typography
-                                component='span'
-                                variant='h5'
-                                className={classes.label}
-                            >
-                                Live :
-                            </Typography>
-                            {isEditable ? (
-                                <TextField
-                                    value={isLive}
-                                    select
-                                    onChange={(event) => {
-                                        setLive(event.target.value);
-                                        setNewChange(true);
-                                    }}
-                                >
-                                    <MenuItem key='live-key-0' value={false}>
-                                        No
-                                    </MenuItem>
-                                    <MenuItem key='live-key-1' value>
-                                        Yes
-                                    </MenuItem>
-                                </TextField>
-                            ) : (
-                                <Typography component='span' variant='h6'>
-                                    {isLive ? 'Yes' : 'No'}
-                                </Typography>
-                            )}
-                        </div>
+                        {giveList().map((item) => (
+                            <div className={classes.inputGroup}>
+                                <Item {...item} />
+                            </div>
+                        ))}
                     </CardContent>
                     <CardActions>
                         {isEditable ? (

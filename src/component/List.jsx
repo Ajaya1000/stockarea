@@ -42,6 +42,7 @@ import { useHistory } from 'react-router-dom';
 
 import { HEADER, TYPE } from '../assets/info';
 import Actions from '../modules/action';
+import Item from './Item';
 
 const useStyle = makeStyles((theme) => ({
     paper: {
@@ -138,7 +139,7 @@ const AddModal = ({ open, onClose }) => {
     const [city, setCity] = useState('');
     const [spaceAvailble, setSpaceAvailble] = useState(0);
     const [type, setType] = useState(0);
-    const [cluster, setcluster] = useState('');
+    const [cluster, setCluster] = useState('');
     const [isRegistered, setRegistered] = useState(false);
     const [isLive, setLive] = useState(false);
 
@@ -146,6 +147,135 @@ const AddModal = ({ open, onClose }) => {
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+
+    const giveList = () => [
+        {
+            label: 'Name',
+            value: name,
+            type: 'number',
+            endorment: {
+                startAdornment: (
+                    <InputAdornment position='start'>Warehouse-</InputAdornment>
+                ),
+            },
+            // menuItems:{
+
+            // }
+            onChange: (value) => {
+                setName(value);
+            },
+            isEditable: true,
+        },
+        {
+            label: 'Code',
+            value: code,
+            type: 'number',
+            endorment: {
+                startAdornment: (
+                    <InputAdornment position='start'>W-</InputAdornment>
+                ),
+            },
+            onChange: (value) => {
+                setCode(value);
+            },
+            isEditable: true,
+        },
+        // {
+        //     label: 'ID',
+        //     value: id,
+        //     type: 'number',
+        //     isEditable: false,
+        // },
+        {
+            label: 'City',
+            value: city,
+            type: 'text',
+            onChange: (value) => {
+                setCity(value);
+            },
+            isEditable: true,
+        },
+        {
+            label: 'Space Available',
+            value: spaceAvailble,
+            type: 'number',
+            onChange: (value) => {
+                setSpaceAvailble(value);
+            },
+            isEditable: true,
+        },
+        {
+            label: 'Type',
+            value: type,
+            type: 'menu',
+            onChange: (value) => {
+                setType(value);
+            },
+            isEditable: true,
+            menuItems: [
+                {
+                    label: TYPE[0],
+                    value: 0,
+                },
+                {
+                    label: TYPE[1],
+                    value: 1,
+                },
+            ],
+        },
+        {
+            label: 'Cluster Name',
+            value: cluster,
+            type: 'text',
+            endorment: {
+                startAdornment: (
+                    <InputAdornment position='start'>cluster-</InputAdornment>
+                ),
+            },
+            onChange: (value) => {
+                setCluster(value);
+            },
+            isEditable: true,
+        },
+        {
+            label: 'Registered',
+            value: isRegistered,
+            type: 'menu',
+            onChange: (value) => {
+                setRegistered(value);
+            },
+            isEditable: true,
+            menuItems: [
+                {
+                    label: 'Yes',
+                    value: true,
+                },
+                {
+                    label: 'No',
+                    value: false,
+                },
+            ],
+        },
+        {
+            label: 'Live',
+            value: isLive,
+            type: 'menu',
+            onChange: (value) => {
+                setLive(value);
+            },
+            isEditable: true,
+            menuItems: [
+                {
+                    label: 'Yes',
+                    value: true,
+                },
+                {
+                    label: 'No',
+                    value: false,
+                },
+            ],
+        },
+    ];
 
     const giveItem = () => ({
         city,
@@ -162,7 +292,7 @@ const AddModal = ({ open, onClose }) => {
         setName('');
         setCode('');
         setCity('');
-        setcluster('');
+        setCluster('');
         setSpaceAvailble('');
         setRegistered(false);
         setLive(false);
@@ -173,177 +303,11 @@ const AddModal = ({ open, onClose }) => {
         <Dialog open={open} onClose={() => onClose()} keepMounted>
             <DialogTitle> Add Item</DialogTitle>
             <DialogContent>
-                <div id='inputGroup0' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Name :
-                    </Typography>
-                    <TextField
-                        value={name}
-                        onChange={(event) => {
-                            setName(event.target.value);
-                        }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                    Warehouse-
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </div>
-                <div id='inputGroup1' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Code :
-                    </Typography>
-                    <TextField
-                        value={code}
-                        type='number'
-                        onChange={(event) => {
-                            setCode(event.target.value);
-                        }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                    W -
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </div>
-                <div id='inputGroup3' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        City :
-                    </Typography>
-
-                    <TextField
-                        value={city}
-                        onChange={(event) => {
-                            setCity(event.target.value);
-                        }}
-                    />
-                </div>
-                <div id='inputGroup4' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Space Available :
-                    </Typography>
-
-                    <TextField
-                        type='number'
-                        value={spaceAvailble}
-                        onChange={(event) => {
-                            setSpaceAvailble(event.target.value);
-                        }}
-                    />
-                </div>
-                <div id='inputGroup5' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Type :
-                    </Typography>
-
-                    <TextField
-                        value={type}
-                        select
-                        onChange={(event) => {
-                            setType(event.target.value);
-                        }}
-                    >
-                        {TYPE.map((item, index) => (
-                            <MenuItem key={item} value={index}>
-                                {item}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </div>
-                <div id='inputGroup6' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Cluster Name :
-                    </Typography>
-                    <TextField
-                        value={cluster}
-                        onChange={(event) => {
-                            setcluster(event.target.value);
-                        }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                    cluster-
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </div>
-                <div id='inputGroup7' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Registered :
-                    </Typography>
-
-                    <TextField
-                        value={isRegistered}
-                        select
-                        onChange={(event) => {
-                            setRegistered(event.target.value);
-                        }}
-                    >
-                        <MenuItem key='registration-key-0' value={false}>
-                            No
-                        </MenuItem>
-                        <MenuItem key='registration-key-1' value>
-                            Yes
-                        </MenuItem>
-                    </TextField>
-                </div>
-                <div id='inputGroup8' className={classes.inputGroup}>
-                    <Typography
-                        component='span'
-                        variant='h5'
-                        className={classes.label}
-                    >
-                        Live :
-                    </Typography>
-
-                    <TextField
-                        value={isLive}
-                        select
-                        onChange={(event) => {
-                            setLive(event.target.value);
-                        }}
-                    >
-                        <MenuItem key='live-key-0' value={false}>
-                            No
-                        </MenuItem>
-                        <MenuItem key='live-key-1' value>
-                            Yes
-                        </MenuItem>
-                    </TextField>
-                </div>
+                {giveList().map((item) => (
+                    <div className={classes.inputGroup}>
+                        <Item {...item} />
+                    </div>
+                ))}
             </DialogContent>
             <DialogActions>
                 <Button
@@ -381,11 +345,6 @@ const AddModal = ({ open, onClose }) => {
         </Dialog>
     );
 };
-
-// const FIlterMenuItem = (props) =>{
-
-//     return
-// }
 
 const List = () => {
     const data = useSelector((state) => state.items);
