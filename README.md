@@ -76,6 +76,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 - [X] Add filter to the listing page (live,registered) 
     -  Adding radio button for live Live,Not Live, All
     -  Adding radio button for registerd Registered,Not registered, All
-- [ ] Improve Detail page
+- [X] Improve Detail page
     - Breakdown into smaller components
-- [ ] Improving codebase by modularizing components
+- [X] Improving codebase by modularizing components
