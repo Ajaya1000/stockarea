@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.js": "/stockarea/static/js/main.341f71aa.chunk.js",
+    "main.js.map": "/stockarea/static/js/main.341f71aa.chunk.js.map",
+    "runtime-main.js": "/stockarea/static/js/runtime-main.d7dc032c.js",
+    "runtime-main.js.map": "/stockarea/static/js/runtime-main.d7dc032c.js.map",
+    "static/js/2.289f7394.chunk.js": "/stockarea/static/js/2.289f7394.chunk.js",
+    "static/js/2.289f7394.chunk.js.map": "/stockarea/static/js/2.289f7394.chunk.js.map",
+    "index.html": "/stockarea/index.html",
+    "static/js/2.289f7394.chunk.js.LICENSE.txt": "/stockarea/static/js/2.289f7394.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d7dc032c.js",
+    "static/js/2.289f7394.chunk.js",
+    "static/js/main.341f71aa.chunk.js"
+  ]
+}
